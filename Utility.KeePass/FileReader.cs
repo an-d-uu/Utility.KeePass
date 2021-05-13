@@ -101,111 +101,36 @@ namespace Utility.KeePass
         }
         public string getDataByGroup(string value, string kpGroup, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
         {
-            string returnValue = string.Empty;
-            var ioconninfo = new KeePassLib.Serialization.IOConnectionInfo();
-            if (!(string.IsNullOrEmpty(KeepassDBFilePath)))
-            {
-
-                ioconninfo.Path = base64Decode(KeepassDBFilePath);
-                KeePassLib.Keys.CompositeKey compkey = new KeePassLib.Keys.CompositeKey();
-                if (string.IsNullOrEmpty(KeepassKeyFilePath) && string.IsNullOrEmpty(KeepassMasterPassword))
-                {
-                    throw new Exception("A Key file or Master Password has not been set!");
-                }
-                else
-                {
-
-
-                    if (!(string.IsNullOrEmpty(KeepassKeyFilePath))) { compkey.AddUserKey(new KeePassLib.Keys.KcpKeyFile(base64Decode(KeepassKeyFilePath))); }
-                    if (!(string.IsNullOrEmpty(KeepassMasterPassword))) { compkey.AddUserKey(new KeePassLib.Keys.KcpPassword(base64Decode(KeepassMasterPassword))); }
-                    var db = new KeePassLib.PwDatabase();
-
-                    try
-                    {
-                        db.Open(ioconninfo, compkey, null);
-                        KeePassLib.Collections.PwObjectList<KeePassLib.PwEntry> entries = db.RootGroup.GetEntries(true);
-
-                        KeePassLib.PwEntry pw = entries.FirstOrDefault(i => i.Strings.ReadSafe(kpColumn2Search) == value && i.ParentGroup.Name == kpGroup);
-
-                        if (pw != null)
-                            returnValue = pw.Strings.ReadSafe(kpColumn2Return);
-                        else
-                            returnValue = string.Empty;
-
-                        pw = null;
-
-                    }
-                    catch
-                    {
-                        throw;
-                    }
-                    finally
-                    {
-                        if (db.IsOpen)
-                        {
-                            db.Close();
-                            db = null;
-                        }
-                    }
-                }
-            }
+            KeePassLib.PwGroup group = getGroup(kpGroup);
+            if (group != null)
+                return getDataByGroup(value, group, kpColumn2Search, kpColumn2Return);
             else
-                throw new Exception("Keepass DB Path has not been set!");
-
-            return returnValue;
+                throw new Exception("Group not found!");
         }
         public string getDataByGroup(string value, KeePassLib.PwGroup kpGroup, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
         {
             string returnValue = string.Empty;
             var ioconninfo = new KeePassLib.Serialization.IOConnectionInfo();
-            if (!(string.IsNullOrEmpty(KeepassDBFilePath)))
+            if (!(string.IsNullOrEmpty(kpGroup.ToString())))
             {
-
-                ioconninfo.Path = base64Decode(KeepassDBFilePath);
-                KeePassLib.Keys.CompositeKey compkey = new KeePassLib.Keys.CompositeKey();
-                if (string.IsNullOrEmpty(KeepassKeyFilePath) && string.IsNullOrEmpty(KeepassMasterPassword))
+                try
                 {
-                    throw new Exception("A Key file or Master Password has not been set!");
+                    KeePassLib.PwEntry pw = kpGroup.Entries.FirstOrDefault(i => i.Strings.ReadSafe(kpColumn2Search) == value);
+
+                    if (pw != null)
+                        returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                    else
+                        returnValue = string.Empty;
+
+                    pw = null;
+
                 }
-                else
+                catch
                 {
-
-
-                    if (!(string.IsNullOrEmpty(KeepassKeyFilePath))) { compkey.AddUserKey(new KeePassLib.Keys.KcpKeyFile(base64Decode(KeepassKeyFilePath))); }
-                    if (!(string.IsNullOrEmpty(KeepassMasterPassword))) { compkey.AddUserKey(new KeePassLib.Keys.KcpPassword(base64Decode(KeepassMasterPassword))); }
-                    var db = new KeePassLib.PwDatabase();
-
-                    try
-                    {
-                        db.Open(ioconninfo, compkey, null);
-                        KeePassLib.Collections.PwObjectList<KeePassLib.PwEntry> entries = db.RootGroup.GetEntries(true);
-
-                        KeePassLib.PwEntry pw = entries.FirstOrDefault(i => i.Strings.ReadSafe(kpColumn2Search) == value && i.ParentGroup == kpGroup);
-
-                        if (pw != null)
-                            returnValue = pw.Strings.ReadSafe(kpColumn2Return);
-                        else
-                            returnValue = string.Empty;
-
-                        pw = null;
-
-                    }
-                    catch
-                    {
-                        throw;
-                    }
-                    finally
-                    {
-                        if (db.IsOpen)
-                        {
-                            db.Close();
-                            db = null;
-                        }
-                    }
+                    throw;
                 }
+
             }
-            else
-                throw new Exception("Keepass DB Path has not been set!");
 
             return returnValue;
         }
