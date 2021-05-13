@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.KeePass\Utility.KeePass.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="KeePass">
+      <HintPath>..\..\..\DLL Projects\KeePass\KeePass.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

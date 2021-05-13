@@ -70,9 +70,12 @@ namespace Utility.KeePass
                         KeePassLib.Collections.PwObjectList<KeePassLib.PwEntry> entries = db.RootGroup.GetEntries(true);
                         //var data =  from entry in db.rootgroup.getentries(true) where entry.strings.readsafe("title") == "tyler-u-client-id" select entry;
 
-                        KeePassLib.PwEntry pw = entries.First(i => i.Strings.ReadSafe(kpColumn2Search) == value);
+                        KeePassLib.PwEntry pw = entries.FirstOrDefault(i => i.Strings.ReadSafe(kpColumn2Search) == value);
 
-                        returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                        if (pw != null)
+                            returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                        else
+                            returnValue = string.Empty;
 
                         pw = null;
 
@@ -96,7 +99,7 @@ namespace Utility.KeePass
 
             return returnValue;
         }
-        public string getData(string value, string kpGroup, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
+        public string getDataByGroup(string value, string kpGroup, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
         {
             string returnValue = string.Empty;
             var ioconninfo = new KeePassLib.Serialization.IOConnectionInfo();
@@ -122,9 +125,12 @@ namespace Utility.KeePass
                         db.Open(ioconninfo, compkey, null);
                         KeePassLib.Collections.PwObjectList<KeePassLib.PwEntry> entries = db.RootGroup.GetEntries(true);
 
-                        KeePassLib.PwEntry pw = entries.First(i => i.Strings.ReadSafe(kpColumn2Search) == value && i.ParentGroup.Name == kpGroup);
+                        KeePassLib.PwEntry pw = entries.FirstOrDefault(i => i.Strings.ReadSafe(kpColumn2Search) == value && i.ParentGroup.Name == kpGroup);
 
-                        returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                        if (pw != null)
+                            returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                        else
+                            returnValue = string.Empty;
 
                         pw = null;
 
@@ -148,7 +154,7 @@ namespace Utility.KeePass
 
             return returnValue;
         }
-        public string getData(string value, KeePassLib.PwGroup kpGroup, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
+        public string getDataByGroup(string value, KeePassLib.PwGroup kpGroup, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
         {
             string returnValue = string.Empty;
             var ioconninfo = new KeePassLib.Serialization.IOConnectionInfo();
@@ -174,9 +180,12 @@ namespace Utility.KeePass
                         db.Open(ioconninfo, compkey, null);
                         KeePassLib.Collections.PwObjectList<KeePassLib.PwEntry> entries = db.RootGroup.GetEntries(true);
 
-                        KeePassLib.PwEntry pw = entries.First(i => i.Strings.ReadSafe(kpColumn2Search) == value && i.ParentGroup == kpGroup);
+                        KeePassLib.PwEntry pw = entries.FirstOrDefault(i => i.Strings.ReadSafe(kpColumn2Search) == value && i.ParentGroup == kpGroup);
 
-                        returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                        if (pw != null)
+                            returnValue = pw.Strings.ReadSafe(kpColumn2Return);
+                        else
+                            returnValue = string.Empty;
 
                         pw = null;
 
