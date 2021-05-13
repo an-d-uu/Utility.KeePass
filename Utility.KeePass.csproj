@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;net451;net452;net46;net461;net462;net47;net471;net472;net48</TargetFrameworks>
+    <Version>0.0.2</Version>
+    <Authors>Andy Woodward</Authors>
+    <Company>Woodward Coding Solutions</Company>
+    <Description>Allows you to read data from a KeePass db file.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="KeePass">
+      <HintPath>..\..\DLL Projects\KeePass\KeePass.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
