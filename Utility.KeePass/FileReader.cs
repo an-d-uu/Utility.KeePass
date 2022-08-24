@@ -47,7 +47,7 @@ namespace Utility.KeePass
         {
             KeepassMasterPassword = base64Encode(value);
         }
-        public string getData(string value, string kpColumn2Search = "Title", string kpColumn2Return = "Password")
+        public string getData(string value, string kpColumn2Search = "Title", string kpColumn2Return = "Password", string v = null)
         {
             string returnValue = string.Empty;
             var ioconninfo = new KeePassLib.Serialization.IOConnectionInfo();
